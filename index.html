@@ -92,6 +92,7 @@ main{padding:26px 30px 60px;max-width:1040px}
 .col i{display:block;width:100%;border-radius:5px 5px 0 0;min-height:3px}.col small{font-size:10px;color:var(--mu)}
 /* ===== Google Calendar style ===== */
 main.wide{max-width:none;padding:16px 20px 24px}
+nav .menu button .n{margin-left:auto;font-size:12px;background:var(--ln);color:var(--tx);border-radius:99px;padding:0 8px}nav .menu button.on .n{background:var(--sf)}
 nav .brand{font:700 20px "Bricolage Grotesque",sans-serif;margin:2px 8px 14px;letter-spacing:-.4px;color:var(--tx)}
 nav button.mk{width:auto;border-radius:24px;background:var(--sf);color:var(--tx);box-shadow:0 1px 3px rgba(0,0,0,.28);padding:12px 22px 12px 14px;font-weight:600;gap:10px;margin:0 0 6px 4px}
 nav button.mk:hover{box-shadow:0 3px 8px rgba(0,0,0,.3);background:var(--ac2)}nav button.mk b{font-size:24px;line-height:1;color:var(--ac)}
@@ -346,13 +347,13 @@ function pick(ds){S.date=ds;S.view='cal';render()}
 function nav(){const k=today(),d=new Date(S.date+'T00:00'),st=monOf(fmtD(new Date(d.getFullYear(),d.getMonth(),1)));
 const mo=d.toLocaleDateString('vi-VN',{month:'long',year:'numeric'});
 const days=[...Array(42)].map((_,i)=>{const ds=addD(st,i),x=new Date(ds+'T00:00');return`<div class="md ${x.getMonth()!==d.getMonth()?'o':''} ${ds===k?'td':''} ${ds===S.date?'sel':''}" onclick="pick('${ds}')">${x.getDate()}</div>`}).join('');
-const items=[['cal','Lịch','▦'],['all','Danh sách ngày','☰'],['focus','Học tập trung','◎'],['review','Tổng kết','◔'],['rules','Quy tắc & thông báo','⚙'],['tools','Tiện ích & dữ liệu','⚒']];
+const items=[['cal','Lịch','▦'],['all','Danh sách ngày','☰'],['main','Task chính','◆'],['health','Task sức khỏe','♥'],['sleep','Task ngủ','☾'],['life','Task sinh hoạt','⌂'],['focus','Học tập trung','◎'],['review','Tổng kết','◔'],['rules','Quy tắc & thông báo','⚙'],['tools','Tiện ích & dữ liệu','⚒']];
 document.getElementById('nav').innerHTML=`<div class="brand">Nhịp ngày</div>
 <button class="mk" onclick="edit(0,'main')"><b>+</b>Tạo</button>
 <div class="mini"><div class="mi-h"><span>${mo.charAt(0).toUpperCase()+mo.slice(1)}</span><button class="ib" onclick="mnav(-1)" aria-label="Tháng trước">‹</button><button class="ib" onclick="mnav(1)" aria-label="Tháng sau">›</button></div>
 <div class="mi-g">${DOW.map(x=>`<span class="mw">${x.replace('T','')}</span>`).join('')}${days}</div></div>
 <div class="mycal"><h4>Lịch của tôi</h4>${Object.entries(CATS).map(([i,c])=>`<label class="cc"><input type="checkbox" style="accent-color:${c.c}" ${S.hid[i]?'':'checked'} onchange="ctoggle('${i}')">${c.n}<span class="n">${dayTasks(S.date,i).length}</span></label>`).join('')}</div>
-<div class="menu">${items.map(([i,n,ic])=>`<button class="${S.view===i?'on':''}" onclick="go('${i}')"><span class="dot" style="color:var(--mu)">${ic}</span>${n}${i==='review'?`<span class="n">${failN()}</span>`:''}</button>`).join('')}<button onclick="theme()">◐ Đổi giao diện</button></div>`}
+<div class="menu">${items.map(([i,n,ic])=>`<button class="${S.view===i?'on':''}" onclick="go('${i}')"><span class="dot" style="color:${CATS[i]?CATS[i].c:'var(--mu)'}">${ic}</span>${n}${i==='review'?`<span class="n">${failN()}</span>`:''}${CATS[i]?`<span class="n">${dayTasks(S.date,i).length}</span>`:''}</button>`).join('')}<button onclick="theme()">◐ Đổi giao diện</button></div>`}
 function segs(ds){const o=[];S.tasks.forEach(t=>{if(S.hid[t.cat])return;const[a,b]=span(t);if(occurs(t,ds))o.push([t,a,Math.min(b,1440),ds]);if(b>1440&&occurs(t,addD(ds,-1)))o.push([t,0,b-1440,addD(ds,-1)])});return o}
 function lanes(L){L.sort((x,y)=>x[1]-y[1]);const ln=[];L.forEach(e=>{let i=0;while(ln[i]>e[1])i++;ln[i]=e[2];e.l=i});L.forEach(e=>e.n=ln.length);return L}
 function ev(e){const[t,a,b,od]=e,s=stOf(t,od),st=status(t,od);
