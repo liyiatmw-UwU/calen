@@ -126,6 +126,12 @@ nav .mi-h .ib{width:28px;height:28px;font-size:18px;margin:0;padding:0}
 .mn{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;font-size:13px}.mn.td{background:var(--ac);color:var(--oa)}
 .me{font-size:11px;border-radius:4px;padding:1px 5px;margin-top:2px;background:var(--cc);color:var(--oa);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mm{color:var(--mu);font-size:11px}
 @media(max-width:760px){nav .mini,nav .mycal,nav .brand{display:none}nav .menu{display:contents}main.wide{padding:10px}.mc{min-height:70px}}
+
+/* fix cuộn */
+nav{height:100vh;height:100dvh;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+.gw{overscroll-behavior:auto;-webkit-overflow-scrolling:touch;touch-action:pan-x pan-y;max-height:calc(100vh - 100px);max-height:calc(100dvh - 100px)}
+.gc,.ge{touch-action:pan-x pan-y}
+@media(max-width:760px){nav{height:auto;overflow-y:hidden;overflow-x:auto;overscroll-behavior:auto}.gw{max-height:calc(100dvh - 150px)}}
 </style>
 </head>
 <body>
