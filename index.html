@@ -90,6 +90,42 @@ main{padding:26px 30px 60px;max-width:1040px}
 .cols{display:flex;gap:3px;align-items:stretch;height:110px}
 .col{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px;min-width:0}
 .col i{display:block;width:100%;border-radius:5px 5px 0 0;min-height:3px}.col small{font-size:10px;color:var(--mu)}
+/* ===== Google Calendar style ===== */
+main.wide{max-width:none;padding:16px 20px 24px}
+nav .brand{font:700 20px "Bricolage Grotesque",sans-serif;margin:2px 8px 14px;letter-spacing:-.4px;color:var(--tx)}
+nav button.mk{width:auto;border-radius:24px;background:var(--sf);color:var(--tx);box-shadow:0 1px 3px rgba(0,0,0,.28);padding:12px 22px 12px 14px;font-weight:600;gap:10px;margin:0 0 6px 4px}
+nav button.mk:hover{box-shadow:0 3px 8px rgba(0,0,0,.3);background:var(--ac2)}nav button.mk b{font-size:24px;line-height:1;color:var(--ac)}
+.mini{margin:10px 2px 14px}.mi-h{display:flex;align-items:center;font-weight:600;font-size:14px;margin-bottom:4px}.mi-h span{flex:1;padding-left:6px}
+.ib{width:36px;height:36px;border-radius:50%;border:0;background:none;color:var(--tx);font-size:22px;cursor:pointer;padding:0;margin:0;justify-content:center}.ib:hover{background:var(--ac2)}
+nav .mi-h .ib{width:28px;height:28px;font-size:18px;margin:0;padding:0}
+.mi-g{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;font-size:11px;gap:1px 0}.mi-g .mw{color:var(--mu);padding:3px 0}
+.md{width:26px;height:26px;line-height:26px;border-radius:50%;cursor:pointer;margin:0 auto}.md:hover{background:var(--ac2)}.md.o{color:var(--mu);opacity:.6}
+.md.td{background:var(--ac);color:var(--oa);opacity:1}.md.sel:not(.td){background:var(--ac2);color:var(--ac);font-weight:700}
+.mycal h4{margin:6px 8px;font-size:13px;color:var(--mu);font-weight:600}
+.cc{display:flex;align-items:center;gap:10px;padding:5px 8px;border-radius:8px;cursor:pointer;font-size:14px;color:var(--tx)}.cc:hover{background:var(--ac2)}
+.cc input{width:16px;height:16px;margin:0}.cc .n{margin-left:auto;font-size:12px;color:var(--mu)}
+.menu{margin-top:12px;border-top:1px solid var(--ln);padding-top:10px}
+.menu button.on{background:var(--ac2);color:var(--ac);font-weight:600;box-shadow:none}
+.ct{display:flex;align-items:center;gap:6px;margin-bottom:12px;flex-wrap:wrap}.ct h2{margin:0 0 0 8px;font-size:22px;font-weight:500}.sp{flex:1}
+.gw{background:var(--sf);border:1px solid var(--ln);border-radius:12px;overflow:auto;max-height:calc(100vh - 100px)}
+.gs{min-width:calc(56px + var(--n)*96px)}.gh,.gb{display:grid;grid-template-columns:56px repeat(var(--n),1fr)}
+.gh{position:sticky;top:0;z-index:3;background:var(--sf);border-bottom:1px solid var(--ln)}
+.gd{text-align:center;padding:6px 0;cursor:pointer;border-left:1px solid var(--ln)}.gd small{display:block;color:var(--mu);font-size:11px}
+.gd b{display:inline-grid;place-items:center;width:36px;height:36px;border-radius:50%;font-size:20px;font-weight:500}
+.gd.td b{background:var(--ac);color:var(--oa)}.gd.td small{color:var(--ac);font-weight:600}
+.hr{height:48px;font-size:10px;color:var(--mu);text-align:right;padding-right:8px;position:relative;top:-7px}
+.gc{position:relative;height:1152px;border-left:1px solid var(--ln);cursor:pointer;background:repeating-linear-gradient(to bottom,transparent 0,transparent 47px,var(--ln) 47px,var(--ln) 48px)}
+.nl{position:absolute;left:0;right:0;height:2px;background:var(--bad);z-index:2;pointer-events:none}.nl::before{content:"";position:absolute;left:-5px;top:-4px;width:10px;height:10px;border-radius:50%;background:var(--bad)}
+.ge{position:absolute;border-radius:6px;padding:2px 6px;font-size:12px;line-height:1.25;overflow:hidden;cursor:pointer;color:var(--oa);background:var(--cc);border:1px solid var(--sf);z-index:1}
+.ge b{display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ge span{opacity:.9;font-size:11px}
+.ge.dn{opacity:.5;text-decoration:line-through}.ge.lt{outline:2px solid var(--bad);outline-offset:-1px}
+.mg{display:grid;grid-template-columns:repeat(7,1fr);border:1px solid var(--ln);border-radius:12px;overflow:hidden;background:var(--sf)}
+.mh{text-align:center;padding:6px;font-size:12px;color:var(--mu);border-bottom:1px solid var(--ln)}
+.mc{min-height:104px;border-right:1px solid var(--ln);border-bottom:1px solid var(--ln);padding:4px;cursor:pointer;min-width:0}
+.mc.o{background:color-mix(in srgb,var(--ln) 25%,transparent);color:var(--mu)}
+.mn{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;font-size:13px}.mn.td{background:var(--ac);color:var(--oa)}
+.me{font-size:11px;border-radius:4px;padding:1px 5px;margin-top:2px;background:var(--cc);color:var(--oa);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mm{color:var(--mu);font-size:11px}
+@media(max-width:760px){nav .mini,nav .mycal,nav .brand{display:none}nav .menu{display:contents}main.wide{padding:10px}.mc{min-height:70px}}
 </style>
 </head>
 <body>
@@ -116,7 +152,7 @@ const seed=()=>{const t=today();return[
 {id:2,cat:'health',title:'Tập thể dục',date:t,start:'06:00',end:'06:45',rep:'daily',rem:15,checks:['Khởi động 5 phút','Tập chính 30 phút','Giãn cơ'],st:{}},
 {id:3,cat:'life',title:'Ăn trưa',date:t,start:'12:00',end:'12:45',rep:'daily',rem:5,checks:['Uống 1 ly nước','Không dùng điện thoại'],st:{}},
 {id:4,cat:'sleep',title:'Ngủ đêm',date:t,start:'22:30',end:'06:00',rep:'daily',rem:30,checks:['Tắt màn hình','Chuẩn bị đồ ngày mai','Tắt đèn'],st:{}}]};
-let S={tasks:store('nd_tasks',null)||seed(),rules:store('nd_rules',null)||Object.fromEntries(Object.entries(RULES).map(([k,v])=>[k,!!v[2]])),log:store('nd_log',[]),fired:store('nd_fired',{}),view:'all',date:today(),theme:store('nd_theme','')};
+let S={tasks:store('nd_tasks',null)||seed(),rules:store('nd_rules',null)||Object.fromEntries(Object.entries(RULES).map(([k,v])=>[k,!!v[2]])),log:store('nd_log',[]),fired:store('nd_fired',{}),view:'cal',date:today(),theme:store('nd_theme','')};
 const persist=()=>{save('nd_tasks',S.tasks);save('nd_rules',S.rules);save('nd_log',S.log.slice(0,80));save('nd_fired',S.fired);if(window.autoPush)autoPush()};
 const mins=t=>{const[a,b]=t.split(':');return +a*60+ +b};
 const span=t=>{const s=mins(t.start);let e=mins(t.end);if(e<=s)e+=1440;return[s,e]};
@@ -173,6 +209,7 @@ if(o)return err(`Quy tắc: trùng giờ với "${o.title}" (${o.start}–${o.en
 if(id){const old=S.tasks.find(x=>x.id===id);t.st=old.st;t.fav=old.fav;S.tasks=S.tasks.map(x=>x.id===id?t:x)}else S.tasks.push(t);
 persist();dlg.close();render()}
 function render(soft){if(soft&&(dlg.open||/INPUT|TEXTAREA/.test(document.activeElement.tagName)))return;nav();const m=document.getElementById('main'),k=S.date,v=S.view;
+m.className=v==='cal'?'wide':'';if(v==='cal'){const o=document.querySelector('.gw'),sy=o?o.scrollTop:null;m.innerHTML=calHTML();const g=document.querySelector('.gw');if(g){const n=new Date();g.scrollTop=sy!==null?sy:Math.max(0,(n.getHours()*60+n.getMinutes())*.8-200)}const c=document.getElementById('clk');if(c)c.textContent=new Date().toTimeString().slice(0,8);return}
 if(v==='review'){m.innerHTML=reviewHTML();return}
 if(v==='tools'){m.innerHTML=toolsHTML();return}
 if(v==='focus'){m.innerHTML=focusHTML();ftick();return}
@@ -290,6 +327,42 @@ return`<div class="top"><div><h2>Tổng kết</h2><div style="color:var(--mu)">$
 <div class="card"><h3>Hoàn thành theo ngày</h3><div class="cols">${cols.join('')}</div></div>
 <h3 class="sec">Fail / chưa xong (${fail.length})</h3>${fail.length?fail.map(x=>rvItem(x,1)).join(''):'<div class="empty">Không có task nào trễ trong kỳ này.</div>'}
 <h3 class="sec">Chưa làm (${todo.length})</h3>${todo.length?todo.map(x=>rvItem(x)).join(''):'<div class="empty">Không còn task nào đang chờ.</div>'}`}
+/* ===== Google Calendar style ===== */
+S.cv='week';S.hid=store('nd_hid',{});
+const DOW=['T2','T3','T4','T5','T6','T7','CN'];
+const addD=(ds,n)=>{const d=new Date(ds+'T00:00');d.setDate(d.getDate()+n);return fmtD(d)};
+const monOf=ds=>addD(ds,-((new Date(ds+'T00:00').getDay()+6)%7));
+const cview=v=>{S.cv=v;render()};
+function ctoggle(c){S.hid[c]=!S.hid[c];save('nd_hid',S.hid);render()}
+function mnav(n){const d=new Date(S.date+'T00:00');d.setDate(1);d.setMonth(d.getMonth()+n);S.date=fmtD(d);render()}
+function cnav(n){if(S.cv==='month')return mnav(n);S.date=addD(S.date,n*(S.cv==='week'?7:1));render()}
+function pick(ds){S.date=ds;S.view='cal';render()}
+function nav(){const k=today(),d=new Date(S.date+'T00:00'),st=monOf(fmtD(new Date(d.getFullYear(),d.getMonth(),1)));
+const mo=d.toLocaleDateString('vi-VN',{month:'long',year:'numeric'});
+const days=[...Array(42)].map((_,i)=>{const ds=addD(st,i),x=new Date(ds+'T00:00');return`<div class="md ${x.getMonth()!==d.getMonth()?'o':''} ${ds===k?'td':''} ${ds===S.date?'sel':''}" onclick="pick('${ds}')">${x.getDate()}</div>`}).join('');
+const items=[['cal','Lịch','▦'],['all','Danh sách ngày','☰'],['focus','Học tập trung','◎'],['review','Tổng kết','◔'],['rules','Quy tắc & thông báo','⚙'],['tools','Tiện ích & dữ liệu','⚒']];
+document.getElementById('nav').innerHTML=`<div class="brand">Nhịp ngày</div>
+<button class="mk" onclick="edit(0,'main')"><b>+</b>Tạo</button>
+<div class="mini"><div class="mi-h"><span>${mo.charAt(0).toUpperCase()+mo.slice(1)}</span><button class="ib" onclick="mnav(-1)" aria-label="Tháng trước">‹</button><button class="ib" onclick="mnav(1)" aria-label="Tháng sau">›</button></div>
+<div class="mi-g">${DOW.map(x=>`<span class="mw">${x.replace('T','')}</span>`).join('')}${days}</div></div>
+<div class="mycal"><h4>Lịch của tôi</h4>${Object.entries(CATS).map(([i,c])=>`<label class="cc"><input type="checkbox" style="accent-color:${c.c}" ${S.hid[i]?'':'checked'} onchange="ctoggle('${i}')">${c.n}<span class="n">${dayTasks(S.date,i).length}</span></label>`).join('')}</div>
+<div class="menu">${items.map(([i,n,ic])=>`<button class="${S.view===i?'on':''}" onclick="go('${i}')"><span class="dot" style="color:var(--mu)">${ic}</span>${n}${i==='review'?`<span class="n">${failN()}</span>`:''}</button>`).join('')}<button onclick="theme()">◐ Đổi giao diện</button></div>`}
+function segs(ds){const o=[];S.tasks.forEach(t=>{if(S.hid[t.cat])return;const[a,b]=span(t);if(occurs(t,ds))o.push([t,a,Math.min(b,1440),ds]);if(b>1440&&occurs(t,addD(ds,-1)))o.push([t,0,b-1440,addD(ds,-1)])});return o}
+function lanes(L){L.sort((x,y)=>x[1]-y[1]);const ln=[];L.forEach(e=>{let i=0;while(ln[i]>e[1])i++;ln[i]=e[2];e.l=i});L.forEach(e=>e.n=ln.length);return L}
+function ev(e){const[t,a,b,od]=e,s=stOf(t,od),st=status(t,od);
+return`<div class="ge ${s.done?'dn':''} ${st==='late'?'lt':''}" style="top:${a*.8}px;height:${Math.max((b-a)*.8-2,16)}px;left:${e.l/e.n*100}%;width:calc(${100/e.n}% - 3px);--cc:${CATS[t.cat].c}" onclick="event.stopPropagation();edit(${t.id})" title="${esc(t.title)} ${t.start}–${t.end}"><b>${esc(t.title)}</b><span>${t.start}–${t.end}</span></div>`}
+function cslot(e,ds){const h=Math.min(23,Math.floor(e.offsetY/48));S.date=ds;edit(0,'main');$('f_s').value=hm(h*60);$('f_e').value=h>=23?'23:59':hm(h*60+60)}
+function gridHTML(days){const k=today(),n=new Date(),nm=n.getHours()*60+n.getMinutes();
+return`<div class="gw"><div class="gs" style="--n:${days.length}"><div class="gh"><div></div>${days.map(ds=>{const d=new Date(ds+'T00:00');return`<div class="gd ${ds===k?'td':''}" onclick="S.date='${ds}';S.cv='day';render()"><small>${DOW[(d.getDay()+6)%7]}</small><b>${d.getDate()}</b></div>`}).join('')}</div>
+<div class="gb"><div>${[...Array(24)].map((_,h)=>`<div class="hr">${h?String(h).padStart(2,'0')+':00':''}</div>`).join('')}</div>${days.map(ds=>`<div class="gc" onclick="cslot(event,'${ds}')">${lanes(segs(ds)).map(ev).join('')}${ds===k?`<u class="nl" style="top:${nm*.8}px"></u>`:''}</div>`).join('')}</div></div></div>`}
+function monthHTML(){const d0=new Date(S.date+'T00:00'),st=monOf(fmtD(new Date(d0.getFullYear(),d0.getMonth(),1))),k=today();let h='<div class="mg">'+DOW.map(x=>`<div class="mh">${x}</div>`).join('');
+for(let i=0;i<42;i++){const ds=addD(st,i),d=new Date(ds+'T00:00'),L=segs(ds).filter(e=>e[3]===ds).sort((a,b)=>a[1]-b[1]);
+h+=`<div class="mc ${d.getMonth()!==d0.getMonth()?'o':''}" onclick="S.date='${ds}';edit(0,'main')"><span class="mn ${ds===k?'td':''}" onclick="event.stopPropagation();S.date='${ds}';S.cv='day';render()">${d.getDate()}</span>${L.slice(0,3).map(e=>`<div class="me" style="--cc:${CATS[e[0].cat].c}" onclick="event.stopPropagation();edit(${e[0].id})">${e[0].start} ${esc(e[0].title)}</div>`).join('')}${L.length>3?`<small class="mm">+${L.length-3} nữa</small>`:''}</div>`}
+return h+'</div>'}
+function calHTML(){const v=S.cv,d=new Date(S.date+'T00:00'),mo=d.toLocaleDateString('vi-VN',{month:'long',year:'numeric'});
+const title=v==='day'?d.toLocaleDateString('vi-VN',{weekday:'long',day:'numeric',month:'long',year:'numeric'}):mo.charAt(0).toUpperCase()+mo.slice(1);
+const days=v==='day'?[S.date]:[...Array(7)].map((_,i)=>addD(monOf(S.date),i));
+return`<div class="ct"><button class="b" onclick="S.date=today();render()">Hôm nay</button><button class="ib" onclick="cnav(-1)" aria-label="Trước">‹</button><button class="ib" onclick="cnav(1)" aria-label="Sau">›</button><h2>${title}</h2><span class="sp"></span><span class="clock" id="clk" style="font-size:18px"></span><select onchange="cview(this.value)" aria-label="Chế độ xem">${[['day','Ngày'],['week','Tuần'],['month','Tháng']].map(([k,n])=>`<option value="${k}" ${v===k?'selected':''}>${n}</option>`).join('')}</select></div>${v==='month'?monthHTML():gridHTML(days)}`}
 document.addEventListener('keydown',e=>{if(e.key==='n'&&!e.ctrlKey&&!e.metaKey&&!/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)&&!dlg.open){e.preventDefault();edit(0)}});
 if(store('nd_tasks',null)===null)fetch('data.json').then(r=>r.ok?r.json():Promise.reject()).then(d=>{apply(d);render();toast('Đã nạp dữ liệu từ data.json.')}).catch(()=>{});
 const dlg=document.getElementById('dlg');
