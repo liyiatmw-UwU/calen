@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nhịp ngày – Quản lý công việc theo giờ</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&display=swap">
+<style>
+:root{--bg:#eef3f1;--sf:#fff;--tx:#12231f;--mu:#566a64;--ln:#d3dfdb;--ac:#0b6e63;--ac2:#dcf0ec;--oa:#fff;--bad:#b3261e;--warn:#9a6700;--ok:#1b7f3b;--c1:#2a5db0;--c2:#c2410c;--c3:#5b3fa8;--c4:#0f766e;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c1614;--sf:#14221f;--tx:#e5f2ee;--mu:#8fa9a2;--ln:#233632;--ac:#3fc4b0;--ac2:#16332f;--oa:#04211c;--bad:#ff8a80;--warn:#f0b429;--ok:#5fd488;--c1:#7aa7ff;--c2:#ff9f6b;--c3:#b9a2ff;--c4:#4fd1c5}}
+:root[data-theme="dark"]{--bg:#0c1614;--sf:#14221f;--tx:#e5f2ee;--mu:#8fa9a2;--ln:#233632;--ac:#3fc4b0;--ac2:#16332f;--oa:#04211c;--bad:#ff8a80;--warn:#f0b429;--ok:#5fd488;--c1:#7aa7ff;--c2:#ff9f6b;--c3:#b9a2ff;--c4:#4fd1c5}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 "Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif}
+.app{display:grid;grid-template-columns:230px 1fr;min-height:100vh}
+nav{background:var(--sf);border-right:1px solid var(--ln);padding:18px 12px;position:sticky;top:0;height:100vh;align-self:start}
+nav h1{font-size:19px;margin:2px 8px 16px;letter-spacing:-.3px}nav h1 small{display:block;font-size:12px;font-weight:400;color:var(--mu)}
+nav button{display:flex;width:100%;align-items:center;gap:9px;padding:10px;border:0;background:none;color:var(--tx);font:inherit;border-radius:8px;cursor:pointer;text-align:left;margin-bottom:2px}
+nav button:hover{background:var(--ac2)}nav button.on{background:var(--ac);color:#fff;font-weight:600}
+nav .dot{width:10px;height:10px;border-radius:50%;flex:none}nav .n{margin-left:auto;font-size:12px;opacity:.8}
+main{padding:22px 26px;max-width:980px;width:100%}
+.top{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:16px}
+.top h2{margin:0;font-size:22px;letter-spacing:-.3px}
+.bar{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+button.b,input,select,textarea{font:inherit;color:var(--tx);background:var(--sf);border:1px solid var(--ln);border-radius:8px;padding:7px 11px}
+button.b{cursor:pointer}button.b:hover{border-color:var(--ac)}button.p{background:var(--ac);color:#fff;border-color:var(--ac);font-weight:600}
+button.d{color:var(--bad)}:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.clock{font-variant-numeric:tabular-nums;font-size:26px;font-weight:700;color:var(--ac)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:16px}
+.st{background:var(--sf);border:1px solid var(--ln);border-radius:10px;padding:10px 12px}.st b{display:block;font-size:22px}.st span{color:var(--mu);font-size:13px}
+.prog{height:8px;background:var(--ln);border-radius:9px;overflow:hidden;margin:6px 0 16px}.prog i{display:block;height:100%;background:var(--ac)}
+.alert{padding:9px 12px;border-radius:8px;margin-bottom:8px;border:1px solid;font-size:14px}
+.alert.bad{color:var(--bad);border-color:var(--bad)}.alert.warn{color:var(--warn);border-color:var(--warn)}
+.task{display:grid;grid-template-columns:86px 1fr;gap:12px;background:var(--sf);border:1px solid var(--ln);border-left:5px solid var(--cc);border-radius:10px;padding:12px;margin-bottom:10px}
+.task.done{opacity:.62}.task.late{border-color:var(--bad);border-left-color:var(--bad)}.task.now{box-shadow:0 0 0 2px var(--ac)}
+.tm{font-variant-numeric:tabular-nums;font-weight:700;line-height:1.25}.tm small{display:block;font-weight:400;color:var(--mu)}
+.th{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}.th h3{margin:0;font-size:16px}
+.tag{font-size:12px;padding:1px 8px;border-radius:99px;border:1px solid var(--ln);color:var(--mu)}
+.tag.bad{color:var(--bad);border-color:var(--bad)}.tag.ok{color:var(--ok);border-color:var(--ok)}.tag.now{color:var(--ac);border-color:var(--ac)}
+.ck{display:flex;gap:8px;align-items:center;padding:3px 0;cursor:pointer}.ck input{width:17px;height:17px;accent-color:var(--ac)}
+.ck.x span{text-decoration:line-through;color:var(--mu)}
+.acts{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}.acts .b{padding:4px 10px;font-size:13px}
+.empty{padding:30px;text-align:center;color:var(--mu);border:1px dashed var(--ln);border-radius:10px}
+.card{background:var(--sf);border:1px solid var(--ln);border-radius:10px;padding:14px;margin-bottom:12px}.card h3{margin:0 0 8px;font-size:16px}
+.rule{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--ln)}.rule:last-child{border:0}.rule input{width:18px;height:18px;accent-color:var(--ac);margin-top:3px}.rule small{display:block;color:var(--mu)}
+.log{padding:7px 0;border-bottom:1px solid var(--ln);font-size:14px}.log time{color:var(--mu);margin-right:8px;font-variant-numeric:tabular-nums}
+dialog{border:1px solid var(--ln);border-radius:12px;background:var(--sf);color:var(--tx);width:min(520px,94vw);padding:18px}dialog::backdrop{background:rgba(0,0,0,.5)}
+label{display:block;font-size:13px;color:var(--mu);margin:9px 0 3px}dialog input,dialog select,dialog textarea{width:100%}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#toasts{position:fixed;right:14px;top:calc(14px + env(safe-area-inset-top,0px));z-index:50;display:grid;gap:8px;width:min(340px,92vw)}
+.toast{background:var(--ac);color:#fff;padding:11px 14px;border-radius:10px;box-shadow:0 6px 20px rgba(0,0,0,.3);font-size:14px}.toast.bad{background:var(--bad);color:#111}
+@media(max-width:760px){.app{grid-template-columns:1fr}nav{position:static;height:auto;display:flex;overflow-x:auto;gap:4px;padding:8px;border-right:0;border-bottom:1px solid var(--ln)}nav h1{display:none}nav button{width:auto;white-space:nowrap;margin:0}main{padding:14px}.task{grid-template-columns:1fr}}
+nav{padding:20px 14px}nav button{border-radius:12px;padding:11px 12px;font-weight:500}
+nav button.on{box-shadow:0 4px 14px color-mix(in srgb,var(--ac) 35%,transparent)}
+nav .dot{width:20px;height:auto;border-radius:0;font-size:16px;text-align:center}nav button.on .dot{color:#fff!important}
+.top h2{font-size:26px;letter-spacing:-.6px}.st,.card{border-radius:14px}.st b{font-size:26px;letter-spacing:-.5px}
+.task{border-radius:14px;padding:14px;box-shadow:0 1px 3px rgba(20,20,70,.06)}
+.tm{background:var(--ac2);border-radius:10px;padding:8px 10px;height:fit-content;text-align:center}
+.prog{height:10px}button.b{border-radius:10px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.chip{border:1px solid var(--ln);background:var(--sf);color:var(--tx);border-radius:99px;padding:8px 15px;cursor:pointer;font:inherit}
+.chip.on{background:var(--ac);color:#fff;border-color:var(--ac);font-weight:600}
+.fw{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+.ring{--p:0;width:250px;height:250px;border-radius:50%;display:grid;place-items:center;margin:6px auto 16px;background:conic-gradient(var(--ac) calc(var(--p)*1%),var(--ln) 0)}
+.ring.br{background:conic-gradient(var(--ok) calc(var(--p)*1%),var(--ln) 0)}
+.ri{width:222px;height:222px;border-radius:50%;background:var(--sf);display:grid;place-content:center;gap:2px}
+.ri b{font-size:48px;font-variant-numeric:tabular-nums;letter-spacing:-1px}.ri span{color:var(--mu);font-size:13px;max-width:190px}
+.zen nav,.zen .nz{display:none}.zen .app{grid-template-columns:1fr}.zen main{margin:0 auto}
+@media(max-width:760px){.fw{grid-template-columns:1fr}}
+
+h1,h2,h3,.clock,.st b,.ri b{font-family:"Bricolage Grotesque","Be Vietnam Pro",system-ui,sans-serif}
+button.p,nav button.on,.chip.on,.toast{color:var(--oa)}nav button.on .dot{color:var(--oa)!important}
+nav{background:transparent;border-right:0;padding:22px 12px 22px 18px}
+nav button{font-weight:500;color:var(--mu)}nav button:hover{color:var(--tx)}nav button.on{box-shadow:none;color:var(--oa)}
+nav .n{background:var(--ln);color:var(--tx);border-radius:99px;padding:0 8px;opacity:1}nav button.on .n{background:rgba(255,255,255,.25);color:inherit}
+main{padding:26px 30px 60px;max-width:1040px}
+.st{border:0;box-shadow:0 1px 0 var(--ln)}.st b{font-size:30px}
+.task{border-left-width:1px;border-radius:16px;box-shadow:none}
+.tm{background:color-mix(in srgb,var(--cc) 14%,var(--sf));box-shadow:inset 4px 0 0 var(--cc);text-align:left;padding:8px 10px 8px 14px;min-width:92px}
+.task.now{box-shadow:0 0 0 2px var(--ac)}
+.strip{position:relative;height:22px;background:var(--ln);border-radius:8px;margin:0 0 30px}
+.strip i{position:absolute;top:0;bottom:0;border-radius:4px;border:1px solid var(--bg)}
+.strip u{position:absolute;top:-5px;bottom:-5px;width:3px;border-radius:2px;background:var(--tx)}
+.strip span{position:absolute;top:26px;font-size:11px;color:var(--mu);transform:translateX(-50%)}
+.nt{width:100%;margin-top:8px;font-size:13px;resize:vertical}
+.rv{background:var(--sf);border:1px solid var(--ln);border-left:5px solid var(--cc);border-radius:14px;padding:12px;margin-bottom:10px}
+.rv.bad{border-color:var(--bad);border-left-color:var(--bad)}
+.sec{margin:22px 0 10px;font-size:18px}
+.ring.rs{width:170px;height:170px;margin-bottom:10px}.ring.rs .ri{width:148px;height:148px}.ring.rs .ri b{font-size:38px}
+.cols{display:flex;gap:3px;align-items:stretch;height:110px}
+.col{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px;min-width:0}
+.col i{display:block;width:100%;border-radius:5px 5px 0 0;min-height:3px}.col small{font-size:10px;color:var(--mu)}
+</style>
+</head>
+<body>
+<div class="app">
+<nav id="nav"></nav>
+<main id="main"></main>
+</div>
+<div id="toasts" aria-live="polite"></div>
+<dialog id="dlg"><form method="dialog" id="frm" onsubmit="return false"></form></dialog>
+<script>
+const CATS={main:{n:'Task chính',c:'var(--c1)'},health:{n:'Task sức khỏe',c:'var(--c2)'},sleep:{n:'Task ngủ',c:'var(--c3)'},life:{n:'Task sinh hoạt',c:'var(--c4)'}};
+const RULES={noOverlap:['Cấm trùng giờ','Không cho lưu task nếu khung giờ chồng lên task khác trong cùng ngày.',1],
+lockStart:['Khóa trước giờ bắt đầu','Không thể đánh dấu hoàn thành khi chưa tới giờ bắt đầu của hôm nay.',1],
+allChecks:['Phải xong checklist','Chỉ hoàn thành task khi mọi mục checklist đã được tick.',1],
+sleepMin:['Ngủ tối thiểu 7 giờ','Cảnh báo nếu task ngủ ngắn hơn 7 giờ.',1],
+sound:['Âm báo','Phát tiếng bíp khi có thông báo.',1],
+sys:['Thông báo của trình duyệt','Hiện thông báo hệ thống (cần cấp quyền).',0]};
+const store=(k,d)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}};
+const save=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+const today=()=>fmtD(new Date());
+function fmtD(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+const seed=()=>{const t=today();return[
+{id:1,cat:'main',title:'Làm việc tập trung (deep work)',date:t,start:'08:30',end:'11:30',rep:'weekdays',rem:10,checks:['Tắt thông báo điện thoại','Chuẩn bị mục tiêu 3 việc','Ghi lại kết quả'],st:{}},
+{id:2,cat:'health',title:'Tập thể dục',date:t,start:'06:00',end:'06:45',rep:'daily',rem:15,checks:['Khởi động 5 phút','Tập chính 30 phút','Giãn cơ'],st:{}},
+{id:3,cat:'life',title:'Ăn trưa',date:t,start:'12:00',end:'12:45',rep:'daily',rem:5,checks:['Uống 1 ly nước','Không dùng điện thoại'],st:{}},
+{id:4,cat:'sleep',title:'Ngủ đêm',date:t,start:'22:30',end:'06:00',rep:'daily',rem:30,checks:['Tắt màn hình','Chuẩn bị đồ ngày mai','Tắt đèn'],st:{}}]};
+let S={tasks:store('nd_tasks',null)||seed(),rules:store('nd_rules',null)||Object.fromEntries(Object.entries(RULES).map(([k,v])=>[k,!!v[2]])),log:store('nd_log',[]),fired:store('nd_fired',{}),view:'all',date:today(),theme:store('nd_theme','')};
+const persist=()=>{save('nd_tasks',S.tasks);save('nd_rules',S.rules);save('nd_log',S.log.slice(0,80));save('nd_fired',S.fired);if(window.autoPush)autoPush()};
+const mins=t=>{const[a,b]=t.split(':');return +a*60+ +b};
+const span=t=>{const s=mins(t.start);let e=mins(t.end);if(e<=s)e+=1440;return[s,e]};
+const hm=m=>{m%=1440;return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0')};
+function occurs(t,d){if(d<t.date)return false;if(t.rep==='none')return d===t.date;if(t.rep==='daily')return true;const w=new Date(d+'T00:00').getDay();return w>0&&w<6}
+const stOf=(t,d)=>t.st[d]||(t.st[d]={done:false,c:[]});
+const dayTasks=(d,cat)=>S.tasks.filter(t=>occurs(t,d)&&(!cat||t.cat===cat)).sort((a,b)=>mins(a.start)-mins(b.start));
+function status(t,d){const s=stOf(t,d);if(s.done)return'done';const n=new Date(),k=today();if(d<k)return'late';if(d>k)return'wait';const m=n.getHours()*60+n.getMinutes(),[a,b]=span(t);if(m>=a&&m<b)return'now';if(t.end<=t.start){return m<a?'wait':'now'}return m>=b?'late':'wait'}
+function conflicts(d){const l=dayTasks(d),r=[];for(let i=0;i<l.length;i++)for(let j=i+1;j<l.length;j++){const[a,b]=span(l[i]),[c,e]=span(l[j]);if(a<e&&c<b)r.push([l[i],l[j]])}return r}
+function toast(msg,bad){const e=document.createElement('div');e.className='toast'+(bad?' bad':'');e.textContent=msg;document.getElementById('toasts').append(e);setTimeout(()=>e.remove(),7000);e.onclick=()=>e.remove()}
+function beep(){if(!S.rules.sound)return;try{const c=new(window.AudioContext||window.webkitAudioContext)(),o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=880;g.gain.value=.15;o.start();o.stop(c.currentTime+.35)}catch(e){}}
+function notify(msg,bad){const n=new Date();S.log.unshift({t:n.getHours()*60+n.getMinutes(),d:today(),m:msg});toast(msg,bad);beep();if(S.rules.sys&&window.Notification&&Notification.permission==='granted'){try{new Notification('Nhịp ngày',{body:msg})}catch(e){}}persist()}
+function tick(){const n=new Date(),k=today(),m=n.getHours()*60+n.getMinutes();let ch=false;
+dayTasks(k).forEach(t=>{if(stOf(t,k).done)return;const[a,b]=span(t);const ev=[['r',a-t.rem,`Còn ${t.rem} phút nữa: ${t.title} (${t.start})`],['s',a,`Đến giờ bắt đầu: ${t.title}`],['e',b%1440,`Hết giờ: ${t.title} – chưa hoàn thành!`,1]];
+ev.forEach(([ty,tg,msg,bad])=>{const key=t.id+'|'+k+'|'+ty;const tgm=(tg+1440)%1440;if(!S.fired[key]&&m>=tgm&&m-tgm<=10&&!(ty==='e'&&b>1440&&m>=a)){S.fired[key]=1;notify(msg,bad)}})});
+const c=document.getElementById('clk');if(c)c.textContent=n.toTimeString().slice(0,8);if(m%5===0&&n.getSeconds()<10)render(true)}
+function nav(){const k=S.date;document.getElementById('nav').innerHTML='<h1>Nhịp ngày<small>Kiểm soát từng phút</small></h1>'+
+[['all','Tổng hợp','var(--ac)'],['focus','Học tập trung','var(--bad)'],['review','Tổng kết','var(--ok)']].concat(Object.entries(CATS).map(([i,c])=>[i,c.n,c.c])).concat([['rules','Quy tắc & thông báo','var(--mu)'],['tools','Tiện ích & dữ liệu','var(--mu)']]).map(([i,n,c])=>`<button class="${S.view===i?'on':''}" onclick="go('${i}')"><span class="dot" style="color:${c}">${IC[i]}</span>${n}${i==='review'?`<span class="n">${failN()}</span>`:''}${CATS[i]||i==='all'?`<span class="n">${dayTasks(k,i==='all'?null:i).length}</span>`:''}</button>`).join('')+
+`<button onclick="theme()" style="margin-top:10px">◐ Đổi giao diện</button>`}
+const IC={all:'▦',focus:'◎',main:'◆',health:'♥',sleep:'☾',life:'⌂',rules:'⚙',tools:'⚒',review:'◔'};
+const go=v=>{S.view=v;document.body.classList.remove('zen');render()};
+function theme(){const r=document.documentElement,d=getComputedStyle(r).getPropertyValue('--bg').trim()==='#0c1614';S.theme=d?'light':'dark';r.dataset.theme=S.theme;save('nd_theme',S.theme)}
+const shift=n=>{const d=new Date(S.date+'T00:00');d.setDate(d.getDate()+n);S.date=fmtD(d);render()};
+function dayBar(){const d=new Date(S.date+'T00:00');return`<div class="bar"><button class="b" onclick="shift(-1)" aria-label="Hôm trước">‹</button><input type="date" value="${S.date}" onchange="S.date=this.value||today();render()"><button class="b" onclick="shift(1)" aria-label="Hôm sau">›</button><button class="b" onclick="S.date=today();render()">Hôm nay</button></div>`}
+function card(t){const d=S.date,s=stOf(t,d),st=status(t,d),[a,b]=span(t),dur=b-a,cc=CATS[t.cat].c;
+const lbl={done:['Hoàn thành','ok'],late:['Trễ giờ','bad'],now:['Đang diễn ra','now'],wait:['Chờ','']}[st];
+const done=t.checks.filter((_,i)=>s.c.includes(i)).length;
+return`<div class="task ${st==='done'?'done':''} ${st==='late'?'late':''} ${st==='now'?'now':''}" style="--cc:${cc}"><div class="tm">${t.start}<small>→ ${t.end}</small><small>${Math.floor(dur/60)}g${dur%60?String(dur%60).padStart(2,'0'):''}</small></div><div><div class="th"><h3>${esc(t.title)}</h3><span><span class="tag">${CATS[t.cat].n.replace('Task ','')}</span> <span class="tag ${lbl[1]}">${lbl[0]}</span>${t.rep!=='none'?` <span class="tag">${t.rep==='daily'?'Mỗi ngày':'T2–T6'}</span>`:''}</span></div>
+${t.checks.map((c,i)=>`<label class="ck ${s.c.includes(i)?'x':''}"><input type="checkbox" ${s.c.includes(i)?'checked':''} onchange="chk(${t.id},${i})"><span>${esc(c)}</span></label>`).join('')}
+<input class="nt" placeholder="Ghi chú: vì sao trễ, làm tiếp thế nào..." value="${esc(s.note||'')}" onchange="note(${t.id},'${d}',this.value)"><div class="acts"><button class="b p" onclick="fin(${t.id})">${s.done?'Mở lại':'Hoàn thành'} ${t.checks.length?`(${done}/${t.checks.length})`:''}</button>${t.fav?`<button class="b p" onclick="fstart(${t.id})">▶ Học tập trung</button>`:''}<button class="b" onclick="star(${t.id})">${t.fav?'★ Đã đánh dấu học':'☆ Đánh dấu học'}</button><button class="b" onclick="edit(${t.id})">Sửa</button>${t.rep==='none'?`<button class="b" onclick="mv(${t.id})">Dời +1 ngày</button>`:''}<button class="b d" onclick="del(${t.id})">Xóa</button></div></div></div>`}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function chk(id,i){const t=S.tasks.find(x=>x.id===id),s=stOf(t,S.date),p=s.c.indexOf(i);p<0?s.c.push(i):s.c.splice(p,1);persist();render()}
+function fin(id){const t=S.tasks.find(x=>x.id===id),s=stOf(t,S.date);if(!s.done){const n=new Date(),k=today();
+if(S.rules.lockStart&&S.date===k&&n.getHours()*60+n.getMinutes()<mins(t.start)){return toast(`Quy tắc: chưa tới giờ bắt đầu (${t.start}).`,1)}
+if(S.rules.lockStart&&S.date>k)return toast('Quy tắc: không thể hoàn thành task của ngày chưa tới.',1);
+if(S.rules.allChecks&&s.c.length<t.checks.length)return toast('Quy tắc: hãy tick hết checklist trước khi hoàn thành.',1)}
+s.done=!s.done;persist();render()}
+function del(id){if(confirm('Xóa task này (cùng mọi lần lặp)?')){S.tasks=S.tasks.filter(t=>t.id!==id);persist();render()}}
+function edit(id,cat){const t=id?S.tasks.find(x=>x.id===id):{cat:cat||'main',title:'',date:S.date,start:'09:00',end:'10:00',rep:'none',rem:10,checks:[]};
+const f=document.getElementById('frm');f.innerHTML=`<h3 style="margin:0">${id?'Sửa task':'Thêm task'}</h3>
+<label>Tên task</label><input id="f_t" value="${esc(t.title)}" required>
+<div class="row"><div><label>Nhóm</label><select id="f_c">${Object.entries(CATS).map(([k,v])=>`<option value="${k}" ${k===t.cat?'selected':''}>${v.n}</option>`).join('')}</select></div><div><label>Ngày bắt đầu</label><input type="date" id="f_d" value="${t.date}"></div></div>
+<div class="row"><div><label>Giờ bắt đầu</label><input type="time" id="f_s" value="${t.start}"></div><div><label>Giờ kết thúc</label><input type="time" id="f_e" value="${t.end}"></div></div>
+<div class="row"><div><label>Lặp lại</label><select id="f_r"><option value="none" ${t.rep==='none'?'selected':''}>Không lặp</option><option value="daily" ${t.rep==='daily'?'selected':''}>Mỗi ngày</option><option value="weekdays" ${t.rep==='weekdays'?'selected':''}>Thứ 2 – Thứ 6</option></select></div><div><label>Nhắc trước (phút)</label><input type="number" id="f_m" min="0" max="240" value="${t.rem}"></div></div>
+<label>Checklist (mỗi dòng một mục)</label><textarea id="f_k" rows="4">${esc(t.checks.join('\n'))}</textarea>
+<p id="f_err" style="color:var(--bad);margin:8px 0 0"></p>
+<div class="bar" style="justify-content:flex-end;margin-top:10px"><button class="b" onclick="dlg.close()">Hủy</button><button class="b p" onclick="submitT(${id||0})">Lưu task</button></div>`;dlg.showModal()}
+function submitT(id){const g=i=>document.getElementById(i).value,err=m=>document.getElementById('f_err').textContent=m;
+const t={id:id||Date.now(),cat:g('f_c'),title:g('f_t').trim(),date:g('f_d'),start:g('f_s'),end:g('f_e'),rep:g('f_r'),rem:Math.max(0,+g('f_m')||0),checks:g('f_k').split('\n').map(x=>x.trim()).filter(Boolean),st:{}};
+if(!t.title)return err('Hãy nhập tên task.');if(!t.date||!t.start||!t.end)return err('Hãy nhập đủ ngày và giờ.');if(t.start===t.end)return err('Giờ kết thúc phải khác giờ bắt đầu.');
+const[a,b]=span(t);if(t.cat==='sleep'&&S.rules.sleepMin&&b-a<420)return err('Quy tắc: task ngủ phải từ 7 giờ trở lên.');
+if(S.rules.noOverlap){const o=S.tasks.find(x=>{if(x.id===t.id)return false;const sim=['none'].includes(t.rep)||['none'].includes(x.rep)?(occurs(x,t.date)&&occurs(t,t.date)):true;if(!sim)return false;const days=t.rep==='none'?[t.date]:Array.from({length:14},(_,i)=>{const d=new Date(t.date+'T00:00');d.setDate(d.getDate()+i);return fmtD(d)});return days.some(d=>occurs(t,d)&&occurs(x,d)&&(()=>{const[c,e]=span(x);return a<e&&c<b})())});
+if(o)return err(`Quy tắc: trùng giờ với "${o.title}" (${o.start}–${o.end}).`)}
+if(id){const old=S.tasks.find(x=>x.id===id);t.st=old.st;t.fav=old.fav;S.tasks=S.tasks.map(x=>x.id===id?t:x)}else S.tasks.push(t);
+persist();dlg.close();render()}
+function render(soft){if(soft&&(dlg.open||/INPUT|TEXTAREA/.test(document.activeElement.tagName)))return;nav();const m=document.getElementById('main'),k=S.date,v=S.view;
+if(v==='review'){m.innerHTML=reviewHTML();return}
+if(v==='tools'){m.innerHTML=toolsHTML();return}
+if(v==='focus'){m.innerHTML=focusHTML();ftick();return}
+if(v==='rules'){m.innerHTML=`<div class="top"><h2>Quy tắc & thông báo</h2></div>
+<div class="card"><h3>Quy tắc kiểm soát</h3>${Object.entries(RULES).map(([i,r])=>`<label class="rule" style="margin:0;color:var(--tx);font-size:15px"><input type="checkbox" ${S.rules[i]?'checked':''} onchange="rule('${i}',this.checked)"><span><b>${r[0]}</b><small>${r[1]}</small></span></label>`).join('')}</div>
+<div class="card"><h3>Cách thông báo hoạt động</h3><div class="log">Nhắc trước giờ bắt đầu theo số phút đặt trong từng task.</div><div class="log">Báo khi đến giờ bắt đầu và khi hết giờ mà chưa hoàn thành.</div><div class="log">Giữ tab mở để nhận thông báo đúng giờ.</div></div>
+<div class="card"><div class="th"><h3>Nhật ký thông báo</h3><span class="bar"><button class="b" onclick="perm()">Cấp quyền thông báo</button><button class="b" onclick="S.log=[];persist();render()">Xóa nhật ký</button></span></div>${S.log.length?S.log.slice(0,30).map(l=>`<div class="log"><time>${l.d.slice(5)} ${hm(l.t)}</time>${esc(l.m)}</div>`).join(''):'<div class="empty">Chưa có thông báo nào.</div>'}</div>`;return}
+const cat=v==='all'?null:v,L=dayTasks(k,cat).filter(t=>!S.q||(t.title+' '+t.checks.join(' ')).toLowerCase().includes(S.q.toLowerCase())),all=dayTasks(k);
+const dn=L.filter(t=>stOf(t,k).done).length,late=L.filter(t=>status(t,k)==='late').length,now=L.filter(t=>status(t,k)==='now').length,pct=L.length?Math.round(dn/L.length*100):0;
+const dt=new Date(k+'T00:00').toLocaleDateString('vi-VN',{weekday:'long',day:'numeric',month:'numeric',year:'numeric'});
+const cf=conflicts(k).filter(([a,b])=>!cat||a.cat===cat||b.cat===cat);
+m.innerHTML=`<div class="top"><div><h2>${v==='all'?'Tổng hợp theo lịch':CATS[v].n}</h2><div style="color:var(--mu)">${dt}</div></div><div class="clock" id="clk"></div></div>
+<div class="top">${dayBar()}<div class="bar"><input type="search" placeholder="Tìm task, nhấn Enter" value="${esc(S.q||'')}" onchange="S.q=this.value.trim();render()"><button class="b p" onclick="edit(0,'${cat||'main'}')">+ Thêm task</button></div></div>
+<div class="stats"><div class="st"><b>${L.length}</b><span>Tổng task</span></div><div class="st"><b>${dn}</b><span>Đã hoàn thành</span></div><div class="st"><b>${now}</b><span>Đang diễn ra</span></div><div class="st"><b style="color:${late?'var(--bad)':'inherit'}">${late}</b><span>Trễ giờ</span></div></div>
+<div class="prog" role="progressbar" aria-valuenow="${pct}"><i style="width:${pct}%"></i></div>
+${strip(k,L)}
+${cf.map(([a,b])=>`<div class="alert bad">Trùng giờ: "${esc(a.title)}" (${a.start}–${a.end}) và "${esc(b.title)}" (${b.start}–${b.end})</div>`).join('')}
+${late?`<div class="alert warn">Có ${late} task đã quá giờ mà chưa hoàn thành.</div>`:''}
+${L.length?L.map(card).join(''):'<div class="empty">Chưa có task nào trong ngày này. Bấm “Thêm task” để lập lịch.</div>'}`;
+tick()}
+function rule(i,v){S.rules[i]=v;persist();if(i==='sys'&&v)perm()}
+function perm(){if(window.Notification)Notification.requestPermission().then(p=>toast(p==='granted'?'Đã bật thông báo trình duyệt.':'Trình duyệt chưa cho phép thông báo.',p!=='granted'));else toast('Trình duyệt không hỗ trợ thông báo.',1)}
+const $=i=>document.getElementById(i);
+const MODES={pomo:{n:'Pomodoro',w:25,b:5,lb:15,d:'25 phút học, nghỉ 5 phút. Sau 4 vòng được nghỉ dài 15 phút. Hợp để bắt đầu nhanh.'},
+p52:{n:'52/17',w:52,b:17,d:'52 phút học sâu, nghỉ 17 phút. Hợp với đọc và viết dài.'},
+p90:{n:'Siêu nhịp 90/20',w:90,b:20,d:'Một chu kỳ 90 phút, nghỉ 20 phút. Hợp với việc khó cần vào trạng thái dòng chảy.'},
+deep:{n:'Deep work 2 giờ',w:120,b:15,d:'120 phút liền không gián đoạn, nghỉ 15 phút. Hợp với dự án lớn.'},
+flow:{n:'Flowtime',d:'Học không đặt giờ, bấm Dừng & nghỉ khi muốn. Thời gian nghỉ bằng 1/5 thời gian đã học.'},
+custom:{n:'Tùy chỉnh',d:'Tự đặt số phút học và nghỉ.'}};
+let F={mode:'pomo',ph:'w',left:1500,run:false,end:0,t0:0,tid:0,cyc:0,dist:0,cw:40,cb:8,fb:300};
+const fst=()=>store('nd_fs',{});
+function flog(min){const a=fst(),k=today(),d=a[k]||(a[k]={m:0,n:0,t:{}});d.m+=min;d.n++;if(F.tid)d.t[F.tid]=(d.t[F.tid]||0)+min;save('nd_fs',a)}
+function fdur(ph){const m=MODES[F.mode];if(F.mode==='flow')return ph==='w'?0:Math.max(60,F.fb);const c=F.mode==='custom',w=c?F.cw:m.w,b=c?F.cb:m.b;return ph==='w'?w*60:(m.lb&&F.cyc>0&&F.cyc%4===0?m.lb:b)*60}
+const fup=()=>F.mode==='flow'&&F.ph==='w';
+function ftick(){if(F.run){if(fup())F.left=Math.floor((Date.now()-F.t0)/1000);else{F.left=Math.round((F.end-Date.now())/1000);if(F.left<=0)return fend()}}
+const mm=String(Math.floor(F.left/60)).padStart(2,'0'),ss=String(F.left%60).padStart(2,'0');document.title=F.run?`${mm}:${ss} – Nhịp ngày`:'Nhịp ngày – Quản lý công việc theo giờ';
+if(!$('ft'))return;$('ft').textContent=mm+':'+ss;$('fr').style.setProperty('--p',fup()?100:Math.round((1-F.left/fdur(F.ph))*100));$('fd').textContent=F.dist}
+function fend(){if(F.ph==='w'){flog(Math.round(fdur('w')/60));F.cyc++;F.ph='b';F.left=fdur('b');F.end=Date.now()+F.left*1000;F.run=true;notify(`Xong một vòng học! Nghỉ ${Math.round(F.left/60)} phút.`)}else{F.ph='w';F.left=fdur('w');F.run=false;notify('Hết giờ nghỉ. Sẵn sàng cho vòng tiếp theo?')}render()}
+function ffin(){const m=Math.floor(F.left/60);if(m>=1)flog(m);F.cyc++;F.fb=Math.round(F.left/5);F.ph='b';F.left=fdur('b');F.end=Date.now()+F.left*1000;F.run=true;notify(`Đã ghi ${m} phút học. Nghỉ ${Math.round(F.left/60)} phút.`);render()}
+function fgo(){if(F.run)F.run=false;else{if(fup())F.t0=Date.now()-F.left*1000;else F.end=Date.now()+F.left*1000;F.run=true}render()}
+function frst(){F.run=false;F.ph='w';F.left=fdur('w');render()}
+function fskip(){if(F.ph==='w'){F.cyc++;F.ph='b'}else F.ph='w';F.left=fdur(F.ph);F.run=false;render()}
+function fmode(i){F.mode=i;F.cyc=0;frst()}
+function fcust(k,v){F[k]=Math.min(300,Math.max(1,+v||1));frst()}
+function fsel(id){F.tid=id;render()}
+function fstart(id){F.tid=id;S.view='focus';render()}
+function star(id){const t=S.tasks.find(x=>x.id===id);t.fav=!t.fav;persist();render()}
+document.addEventListener('visibilitychange',()=>{if(F.run&&F.ph==='w'){if(document.hidden)F.dist++;else toast('Bạn vừa rời tab. Quay lại tập trung nhé!',1)}});
+function focusHTML(){const k=today(),fs=fst()[k]||{m:0,n:0,t:{}},M=MODES[F.mode],fav=dayTasks(S.date).filter(t=>t.fav),cur=S.tasks.find(t=>t.id===F.tid);
+return`<div class="top"><div><h2>Học tập trung</h2><div style="color:var(--mu)">Chọn chế độ, chọn task đã đánh dấu rồi bắt đầu.</div></div><button class="b" onclick="document.body.classList.toggle('zen')">Toàn màn hình</button></div>
+<div class="stats nz"><div class="st"><b>${fs.m}</b><span>Phút học hôm nay</span></div><div class="st"><b>${fs.n}</b><span>Vòng hoàn thành</span></div><div class="st"><b id="fd">${F.dist}</b><span>Lần rời tab</span></div></div>
+<div class="chips nz">${Object.entries(MODES).map(([i,m])=>`<button class="chip ${F.mode===i?'on':''}" onclick="fmode('${i}')">${m.n}</button>`).join('')}</div>
+<div class="card nz"><b>${M.n}</b>: ${M.d}${F.mode==='custom'?`<div class="row" style="margin-top:8px"><div><label>Phút học</label><input type="number" min="1" max="300" value="${F.cw}" onchange="fcust('cw',this.value)"></div><div><label>Phút nghỉ</label><input type="number" min="1" max="300" value="${F.cb}" onchange="fcust('cb',this.value)"></div></div>`:''}</div>
+<div class="fw"><div class="card" style="text-align:center"><div class="ring ${F.ph==='b'?'br':''}" id="fr"><div class="ri"><span>${F.ph==='b'?'Nghỉ giải lao':fup()?'Flowtime':'Đang học'}</span><b id="ft">00:00</b><span>${cur?esc(cur.title):'Học tự do'}</span></div></div>
+<div class="bar" style="justify-content:center"><button class="b p" onclick="fgo()">${F.run?'Tạm dừng':'Bắt đầu'}</button>${fup()&&F.left>=60?'<button class="b" onclick="ffin()">Dừng & nghỉ</button>':''}<button class="b" onclick="fskip()">Bỏ qua</button><button class="b" onclick="frst()">Đặt lại</button></div><div style="color:var(--mu);margin-top:10px;font-size:13px">Vòng đã xong: ${F.cyc}</div></div>
+<div class="card nz"><h3>Task đã đánh dấu</h3><button class="b ${!F.tid?'p':''}" style="width:100%;text-align:left;margin-bottom:6px" onclick="fsel(0)">Học tự do (không gắn task)</button>${fav.length?fav.map(t=>`<button class="b ${F.tid===t.id?'p':''}" style="width:100%;text-align:left;margin-bottom:6px" onclick="fsel(${t.id})">${t.start} · ${esc(t.title)}<br><small>Đã học ${fs.t[t.id]||0} phút hôm nay</small></button>`).join(''):'<div class="empty">Chưa có task nào được đánh dấu cho ngày này. Bấm “☆ Đánh dấu học” ở task bất kỳ để đưa vào đây.</div>'}</div></div>`}
+let noPush=0,apT;
+const GH=()=>store('nd_gh',{o:'',r:'',b:'main',p:'data.json',t:'',auto:false});
+const b64=s=>btoa(unescape(encodeURIComponent(s))),unb64=s=>decodeURIComponent(escape(atob(s.replace(/\n/g,''))));
+const bundle=()=>({v:1,tasks:S.tasks,rules:S.rules,fs:fst(),notes:store('nd_notes','')});
+function apply(d){if(!d||!Array.isArray(d.tasks))throw new Error('sai định dạng');S.tasks=d.tasks;if(d.rules)S.rules=d.rules;save('nd_fs',d.fs||{});save('nd_notes',d.notes||'');noPush=1;persist();noPush=0}
+function dl(n,c,ty){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([c],{type:ty}));a.download=n;a.click()}
+function imp(i){const f=i.files[0];if(!f)return;f.text().then(x=>{try{apply(JSON.parse(x));render();toast('Đã nhập dữ liệu.')}catch(e){toast('File JSON không hợp lệ.',1)}})}
+function ghset(k,v){const g=GH();g[k]=typeof v==='string'?v.trim():v;save('nd_gh',g)}
+function autoPush(){const g=GH();if(noPush||!g.auto||!g.t||!g.o||!g.r)return;clearTimeout(apT);apT=setTimeout(()=>ghPush(1),4000)}
+async function ghPush(q){const g=GH();if(!g.o||!g.r||!g.t)return toast('Điền owner, repo và token trước.',1);const u=`https://api.github.com/repos/${g.o}/${g.r}/contents/${g.p||'data.json'}`,h={Authorization:'Bearer '+g.t,Accept:'application/vnd.github+json'};
+try{let sha;const r=await fetch(u+'?ref='+(g.b||'main'),{headers:h});if(r.ok)sha=(await r.json()).sha;const w=await fetch(u,{method:'PUT',headers:h,body:JSON.stringify({message:'Cập nhật dữ liệu '+new Date().toISOString(),content:b64(JSON.stringify(bundle(),null,1)),branch:g.b||'main',sha})});if(!w.ok)throw new Error((await w.json()).message);if(!q)toast('Đã lưu lên GitHub.')}catch(e){toast('Lỗi GitHub: '+e.message,1)}}
+async function ghPull(){const g=GH();try{const h={Accept:'application/vnd.github+json'};if(g.t)h.Authorization='Bearer '+g.t;const r=await fetch(`https://api.github.com/repos/${g.o}/${g.r}/contents/${g.p||'data.json'}?ref=${g.b||'main'}`,{headers:h});if(!r.ok)throw new Error('không tìm thấy file ('+r.status+')');apply(JSON.parse(unb64((await r.json()).content)));render();toast('Đã tải dữ liệu từ GitHub.')}catch(e){toast('Lỗi GitHub: '+e.message,1)}}
+function ics(){const o=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//NhipNgay//VI'];S.tasks.forEach(t=>{const d=t.date.replace(/-/g,'');let ed=d;if(t.end<=t.start){const x=new Date(t.date+'T00:00');x.setDate(x.getDate()+1);ed=fmtD(x).replace(/-/g,'')}
+o.push('BEGIN:VEVENT','UID:'+t.id+'@nhipngay','DTSTAMP:'+d+'T000000','DTSTART:'+d+'T'+t.start.replace(':','')+'00','DTEND:'+ed+'T'+t.end.replace(':','')+'00','SUMMARY:'+t.title,'DESCRIPTION:'+t.checks.join(' / '));if(t.rep==='daily')o.push('RRULE:FREQ=DAILY');if(t.rep==='weekdays')o.push('RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR');o.push('BEGIN:VALARM','TRIGGER:-PT'+t.rem+'M','ACTION:DISPLAY','DESCRIPTION:'+t.title,'END:VALARM','END:VEVENT')});o.push('END:VCALENDAR');dl('lich-nhip-ngay.ics',o.join('\r\n'),'text/calendar')}
+function mv(id){const t=S.tasks.find(x=>x.id===id),d=new Date(t.date+'T00:00');d.setDate(d.getDate()+1);t.date=fmtD(d);S.date=t.date;persist();render()}
+const TPL={'Ngày làm việc':[['life','Dậy & vệ sinh','06:00','06:30','weekdays',['Uống nước','Dọn giường']],['health','Vận động','06:30','07:15','weekdays',['Khởi động','Tập chính']],['main','Làm việc sâu','08:30','11:30','weekdays',['Chọn 3 việc ưu tiên','Tắt thông báo'],1],['life','Ăn trưa','12:00','12:45','weekdays',['Ăn chậm','Đi bộ 10 phút']],['main','Họp & email','14:00','16:00','weekdays',['Trả lời email','Cập nhật tiến độ']],['sleep','Ngủ','22:30','06:00','weekdays',['Tắt màn hình','Tắt đèn']]],
+'Ngày ôn thi':[['main','Học môn chính','08:00','10:00','daily',['Đọc lý thuyết','Ghi chú'],1],['main','Làm đề','10:30','12:00','daily',['Bấm giờ','Chấm điểm'],1],['health','Đi bộ','17:00','17:30','daily',['Uống nước']],['main','Ôn lại lỗi sai','20:00','21:00','daily',['Sổ lỗi sai'],1]]};
+function tpl(k){TPL[k].forEach((x,i)=>S.tasks.push({id:Date.now()+i,cat:x[0],title:x[1],date:today(),start:x[2],end:x[3],rep:x[4],rem:10,checks:x[5],fav:!!x[6],st:{}}));persist();render();toast('Đã thêm lịch mẫu. Kiểm tra cảnh báo trùng giờ.')}
+function toolsHTML(){const g=GH(),fs=fst();
+const rows=[...Array(7)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()-6+i);const k=fmtD(d),L=dayTasks(k),n=L.filter(t=>stOf(t,k).done).length,p=L.length?Math.round(n/L.length*100):0;return`<div class="rule" style="align-items:center"><span style="width:78px">${d.toLocaleDateString('vi-VN',{weekday:'short',day:'numeric',month:'numeric'})}</span><div class="prog" style="flex:1;margin:0"><i style="width:${p}%"></i></div><span style="width:140px;text-align:right">${n}/${L.length} task · ${(fs[k]||{}).m||0} phút học</span></div>`}).join('');
+return`<div class="top"><h2>Tiện ích & dữ liệu</h2></div>
+<div class="card"><h3>Thống kê 7 ngày gần nhất</h3>${rows}</div>
+<div class="card"><h3>Lịch mẫu có sẵn</h3><div class="bar">${Object.keys(TPL).map(k=>`<button class="b" onclick="tpl('${k}')">+ ${k}</button>`).join('')}</div></div>
+<div class="card"><h3>Ghi chú nhanh</h3><textarea style="width:100%" rows="4" placeholder="Viết nhanh ý tưởng, việc cần nhớ..." oninput="save('nd_notes',this.value)">${esc(store('nd_notes',''))}</textarea></div>
+<div class="card"><h3>Sao lưu & khôi phục</h3><div class="bar"><button class="b p" onclick="dl('nhip-ngay-data.json',JSON.stringify(bundle(),null,1),'application/json')">Xuất data.json</button><label class="b" style="margin:0;cursor:pointer;color:var(--tx)">Nhập file JSON<input type="file" accept=".json" hidden onchange="imp(this)"></label><button class="b" onclick="ics()">Xuất lịch .ics (Google/Apple Calendar)</button></div><p style="color:var(--mu);margin:8px 0 0">Dữ liệu lưu sẵn trong trình duyệt. Đặt file data.json cạnh index.html trên GitHub để máy mới tự nạp lần đầu.</p></div>
+<div class="card"><h3>Đồng bộ với GitHub</h3><p style="color:var(--mu);margin:0 0 6px">Chỉ hoạt động khi trang chạy trên GitHub Pages hoặc máy của bạn. Token chỉ lưu trong trình duyệt này.</p>${[['o','Tài khoản GitHub (owner)'],['r','Tên repo'],['b','Nhánh (branch)'],['p','File dữ liệu'],['t','Token (quyền Contents: Read and write)']].map(([k,l])=>`<label>${l}</label><input style="width:100%" ${k==='t'?'type="password"':''} value="${esc(g[k]||'')}" onchange="ghset('${k}',this.value)">`).join('')}
+<label class="rule" style="color:var(--tx);font-size:15px;margin-top:6px"><input type="checkbox" ${g.auto?'checked':''} onchange="ghset('auto',this.checked)"><span>Tự động lưu lên GitHub sau mỗi thay đổi</span></label>
+<div class="bar"><button class="b p" onclick="ghPush()">Lưu lên GitHub</button><button class="b" onclick="ghPull()">Tải từ GitHub</button></div></div>`}
+
+S.rp='week';S.ro=0;let RV={txt:''};
+function strip(k,L){const seg=[];L.forEach(t=>{const[a,b]=span(t),s=status(t,k),c=s==='done'?'var(--ok)':s==='late'?'var(--bad)':CATS[t.cat].c;
+const add=(x,y)=>seg.push(`<i title="${esc(t.title)} ${t.start}–${t.end}" style="left:${x/14.4}%;width:${(y-x)/14.4}%;background:${c};opacity:${s==='done'?.5:1}"></i>`);add(a,Math.min(b,1440));if(b>1440)add(0,b-1440)});
+const n=new Date(),nm=n.getHours()*60+n.getMinutes();
+return`<div class="strip" role="img" aria-label="Dòng thời gian 24 giờ">${seg.join('')}${k===today()?`<u style="left:${nm/14.4}%"></u>`:''}<span style="left:0">0h</span><span style="left:25%">6h</span><span style="left:50%">12h</span><span style="left:75%">18h</span><span style="left:100%">24h</span></div>`}
+function note(id,d,v){stOf(S.tasks.find(x=>x.id===id),d).note=v.trim();persist()}
+function failN(){let n=0;const d=new Date();for(let i=0;i<14;i++){const ds=fmtD(d);dayTasks(ds).forEach(t=>{if(status(t,ds)==='late')n++});d.setDate(d.getDate()-1)}return n}
+function streak(){let n=0;const d=new Date();for(let i=0;i<120;i++){const ds=fmtD(d),L=dayTasks(ds);if(L.length&&L.every(t=>stOf(t,ds).done))n++;else if(i>0)break;d.setDate(d.getDate()-1)}return n}
+function rng(){const n=new Date(today()+'T00:00');if(S.rp==='week'){const a=new Date(n);a.setDate(n.getDate()-(n.getDay()+6)%7+S.ro*7);const b=new Date(a);b.setDate(a.getDate()+6);return[a,b]}
+return[new Date(n.getFullYear(),n.getMonth()+S.ro,1),new Date(n.getFullYear(),n.getMonth()+S.ro+1,0)]}
+const rset=p=>{S.rp=p;S.ro=0;render()};
+const ropen=ds=>{S.date=ds;S.view='all';render()};
+function rdone(id,ds){stOf(S.tasks.find(x=>x.id===id),ds).done=true;persist();toast('Đã đánh dấu hoàn thành (làm bù).');render()}
+function mvt(id){S.tasks.find(x=>x.id===id).date=today();persist();toast('Đã dời task sang hôm nay.');render()}
+function copyRV(){navigator.clipboard.writeText(RV.txt).then(()=>toast('Đã sao chép tổng kết.')).catch(()=>toast('Không sao chép được.',1))}
+function rvItem([t,ds],bad){const s=stOf(t,ds),dt=new Date(ds+'T00:00').toLocaleDateString('vi-VN',{weekday:'short',day:'numeric',month:'numeric'});
+return`<div class="rv ${bad?'bad':''}" style="--cc:${CATS[t.cat].c}"><div class="th"><h3>${esc(t.title)}</h3><span><span class="tag">${dt} · ${t.start}–${t.end}</span> <span class="tag">${CATS[t.cat].n.replace('Task ','')}</span></span></div>
+<textarea class="nt" rows="2" placeholder="Ghi chú: vì sao chưa xong, bước làm tiếp..." onchange="note(${t.id},'${ds}',this.value)">${esc(s.note||'')}</textarea>
+<div class="acts"><button class="b p" onclick="rdone(${t.id},'${ds}')">Đánh dấu đã xong</button><button class="b" onclick="ropen('${ds}')">Mở ngày này</button><button class="b" onclick="edit(${t.id})">Sửa task</button>${t.rep==='none'&&ds<today()?`<button class="b" onclick="mvt(${t.id})">Dời sang hôm nay</button>`:''}</div></div>`}
+function reviewHTML(){const[a,b]=rng(),k=today(),fail=[],todo=[],cols=[],cs={};Object.keys(CATS).forEach(c=>cs[c]={n:0,d:0});let due=0,dn=0;
+for(const d=new Date(a);d<=b;d.setDate(d.getDate()+1)){const ds=fmtD(d),L=dayTasks(ds);let n=0,x=0;
+L.forEach(t=>{const st=status(t,ds);if(ds<=k){n++;cs[t.cat].n++;if(st==='done'){x++;cs[t.cat].d++}}if(st==='late')fail.push([t,ds]);else if(st!=='done')todo.push([t,ds])});
+due+=n;dn+=x;const p=n?Math.round(x/n*100):0,lb=S.rp==='week'?['CN','T2','T3','T4','T5','T6','T7'][d.getDay()]:d.getDate();
+cols.push(`<div class="col" title="${ds}: ${x}/${n} task"><i style="height:${ds>k||!n?3:Math.max(p,4)}%;background:${ds>k||!n?'var(--ln)':p>=80?'var(--ok)':p>=50?'var(--ac)':'var(--bad)'}"></i><small>${lb}</small></div>`)}
+const pct=due?Math.round(dn/due*100):0,f=d=>d.toLocaleDateString('vi-VN',{day:'numeric',month:'numeric'}),label=S.rp==='week'?`Tuần ${f(a)} – ${f(b)}`:`Tháng ${b.getMonth()+1}/${b.getFullYear()}`;
+RV.txt=`Tổng kết ${label}: ${dn}/${due} task (${pct}%)\nChưa xong / fail (${fail.length}):\n`+fail.map(([t,d])=>`- ${d} ${t.title}${stOf(t,d).note?' — '+stOf(t,d).note:''}`).join('\n')+`\nChưa làm (${todo.length}):\n`+todo.map(([t,d])=>`- ${d} ${t.title}`).join('\n');
+return`<div class="top"><div><h2>Tổng kết</h2><div style="color:var(--mu)">${label}</div></div><div class="bar"><button class="chip ${S.rp==='week'?'on':''}" onclick="rset('week')">Tuần</button><button class="chip ${S.rp==='month'?'on':''}" onclick="rset('month')">Tháng</button><button class="b" onclick="S.ro--;render()" aria-label="Kỳ trước">‹</button><button class="b" onclick="S.ro=0;render()">Hiện tại</button><button class="b" onclick="S.ro++;render()" aria-label="Kỳ sau">›</button><button class="b" onclick="copyRV()">Sao chép</button></div></div>
+<div class="fw"><div class="card" style="text-align:center"><div class="ring rs" style="--p:${pct}"><div class="ri"><b>${pct}%</b><span>${dn}/${due} task xong</span></div></div><div style="color:var(--mu);font-size:13px">Chuỗi ngày xong đủ task: <b style="color:var(--tx)">${streak()}</b></div></div>
+<div class="card"><h3>Theo nhóm</h3>${Object.entries(CATS).map(([c,v])=>{const p=cs[c].n?Math.round(cs[c].d/cs[c].n*100):0;return`<div class="rule" style="align-items:center"><span style="width:96px">${v.n.replace('Task ','')}</span><div class="prog" style="flex:1;margin:0"><i style="width:${p}%;background:${v.c}"></i></div><span style="width:84px;text-align:right">${cs[c].d}/${cs[c].n} · ${p}%</span></div>`}).join('')}</div></div>
+<div class="card"><h3>Hoàn thành theo ngày</h3><div class="cols">${cols.join('')}</div></div>
+<h3 class="sec">Fail / chưa xong (${fail.length})</h3>${fail.length?fail.map(x=>rvItem(x,1)).join(''):'<div class="empty">Không có task nào trễ trong kỳ này.</div>'}
+<h3 class="sec">Chưa làm (${todo.length})</h3>${todo.length?todo.map(x=>rvItem(x)).join(''):'<div class="empty">Không còn task nào đang chờ.</div>'}`}
+document.addEventListener('keydown',e=>{if(e.key==='n'&&!e.ctrlKey&&!e.metaKey&&!/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)&&!dlg.open){e.preventDefault();edit(0)}});
+if(store('nd_tasks',null)===null)fetch('data.json').then(r=>r.ok?r.json():Promise.reject()).then(d=>{apply(d);render();toast('Đã nạp dữ liệu từ data.json.')}).catch(()=>{});
+const dlg=document.getElementById('dlg');
+if(S.theme)document.documentElement.dataset.theme=S.theme;
+render();setInterval(tick,5000);setInterval(ftick,500);
+</script>
+</body>
+</html>
